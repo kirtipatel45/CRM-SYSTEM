@@ -18,8 +18,14 @@ const permissionSchema = new mongoose.Schema({
 const roleSchema = new mongoose.Schema({
   name: { 
     type: String, 
-    required: true, 
-    unique: true 
+    required: [true, 'Role name is required'], 
+    unique: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    trim: true,
+    default: ''
   },
   permissions: [permissionSchema],
   isSystem: { 

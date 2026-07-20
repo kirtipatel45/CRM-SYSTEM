@@ -63,7 +63,7 @@ export default function LeadKanban({ leads, loading, onStatusChange }) {
                   className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 cursor-grab active:cursor-grabbing hover:shadow-md transition-shadow"
                 >
                   <div className="font-medium text-gray-900 dark:text-white mb-1">
-                    {lead.firstName} {lead.lastName}
+                    {lead.firstName || ''} {lead.lastName || ''}
                   </div>
                   {lead.company && (
                     <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">
@@ -76,9 +76,9 @@ export default function LeadKanban({ leads, loading, onStatusChange }) {
                     </span>
                     <div
                       className="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold"
-                      title={lead.owner?.name}
+                      title={lead.owner?.name || ''}
                     >
-                      {lead.owner ? lead.owner.name.charAt(0) : "?"}
+                      {lead.owner?.name ? lead.owner.name.charAt(0) : "?"}
                     </div>
                   </div>
                 </motion.div>

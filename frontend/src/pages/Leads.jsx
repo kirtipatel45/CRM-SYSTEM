@@ -79,13 +79,12 @@ export default function Leads() {
         <div className="flex items-center">
           <div className="flex-shrink-0 h-10 w-10">
             <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-blue-100 to-blue-200 dark:from-slate-700 dark:to-slate-600 flex items-center justify-center text-blue-700 dark:text-blue-300 font-semibold">
-              {row.firstName.charAt(0)}
-              {row.lastName.charAt(0)}
+              {row.firstName?.charAt(0) || row.lastName?.charAt(0) || '?'}
             </div>
           </div>
           <div className="ml-4">
             <div className="text-sm font-medium text-gray-900 dark:text-white">
-              {row.firstName} {row.lastName}
+              {row.firstName || ''} {row.lastName || ''}
             </div>
             <div className="text-sm text-gray-500 flex flex-col gap-1 mt-1">
               <span className="flex items-center gap-1">
@@ -125,7 +124,7 @@ export default function Leads() {
       header: "Created",
       cell: (row) => (
         <span className="text-sm text-gray-500">
-          {format(new Date(row.createdAt), "MMM dd, yyyy")}
+          {row.createdAt ? format(new Date(row.createdAt), "MMM dd, yyyy") : '-'}
         </span>
       ),
     },

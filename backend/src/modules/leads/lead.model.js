@@ -47,15 +47,7 @@ const leadSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Middleware to log status changes in timeline
-leadSchema.pre('findOneAndUpdate', async function(next) {
-  const update = this.getUpdate();
-  if (update.status) {
-    // If status is being updated, we can push to timeline but it's tricky in pre('findOneAndUpdate')
-    // A better approach is to handle timeline logic in the controller for complex actions.
-  }
-  next();
-});
+
 
 const Lead = mongoose.model('Lead', leadSchema);
 

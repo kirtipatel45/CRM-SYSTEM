@@ -90,21 +90,18 @@ export const updateLead = async (req, res, next) => {
 
     // Check if status changed to log it
     if (req.body.status && req.body.status !== lead.status) {
-      req.body.$push = {
-        timeline: {
-          action: 'Status Changed',
-          description: `Status changed from ${lead.status} to ${req.body.status}`,
-          performedBy: req.user._id
-        }
-      };
+      lead.timeline.push({
+        action: 'Status Changed',
+        description: `Status changed from ${lead.status} to ${req.body.status}`,
+        performedBy: req.user?._id
+      });
     }
 
-    const updatedLead = await Lead.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    }).populate('owner', 'name email');
+    Object.assign(lead, req.body);
+    await lead.save();
+    await lead.populate('owner', 'name email');
 
-    res.status(200).json({ success: true, data: updatedLead });
+    res.status(200).json({ success: true, data: lead });
   } catch (error) {
     next(error);
   }

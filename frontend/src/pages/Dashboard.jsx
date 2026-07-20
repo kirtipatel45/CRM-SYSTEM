@@ -101,9 +101,13 @@ export default function Dashboard() {
             Welcome back, here's what's happening today.
           </p>
         </div>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+        <motion.button 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+        >
           Download Report
-        </button>
+        </motion.button>
       </div>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -111,9 +115,10 @@ export default function Dashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
+            transition={{ delay: index * 0.1, duration: 0.4 }}
+            whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.2 } }}
             key={item.name}
-            className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-slate-700"
+            className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 cursor-pointer"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -141,16 +146,26 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 min-h-[400px] flex items-center justify-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 min-h-[400px] flex items-center justify-center hover:shadow-md transition-shadow"
+        >
           <p className="text-gray-500 dark:text-gray-400">
             Sales Chart (Coming Soon)
           </p>
-        </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 min-h-[400px] flex items-center justify-center">
+        </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-slate-700 min-h-[400px] flex items-center justify-center hover:shadow-md transition-shadow"
+        >
           <p className="text-gray-500 dark:text-gray-400">
             Recent Activities (Coming Soon)
           </p>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

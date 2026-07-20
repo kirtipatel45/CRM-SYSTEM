@@ -29,7 +29,26 @@ export default function Deals() {
       const { data } = await api.put(`/deals/${dealId}`, { stage: newStage });
       return data;
     },
-    onSuccess: () => {
+    onMutate: async ({ dealId, newStage }) => {
+      await queryClient.cancelQueries({ queryKey: ['deals'] });
+      const previousDeals = queryClient.getQueryData(['deals']);
+      
+      queryClient.setQueryData(['deals'], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          data: old.data.map(deal => 
+            deal._id === dealId ? { ...deal, stage: newStage } : deal
+          )
+        };
+      });
+      
+      return { previousDeals };
+    },
+    onError: (err, newTodo, context) => {
+      queryClient.setQueryData(['deals'], context.previousDeals);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['deals'] });
     }
   });

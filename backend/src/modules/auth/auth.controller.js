@@ -1,5 +1,16 @@
 import User from '../users/user.model.js';
+import Role from '../roles/role.model.js';
 import jwt from 'jsonwebtoken';
+
+export const getPublicRoles = async (req, res, next) => {
+  try {
+    // Only return non-system roles or all roles' id and name
+    const roles = await Role.find().select('_id name');
+    res.status(200).json({ success: true, data: roles });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const generateTokens = (userId) => {
   const accessToken = jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '15m' });

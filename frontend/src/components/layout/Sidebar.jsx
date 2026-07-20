@@ -6,7 +6,8 @@ import {
   Target, 
   Megaphone, 
   Settings,
-  ListTodo
+  ListTodo,
+  UserCog
 } from 'lucide-react';
 
 const navItems = [
@@ -16,6 +17,7 @@ const navItems = [
   { name: 'Deals', path: '/deals', icon: Briefcase },
   { name: 'Marketing', path: '/marketing', icon: Megaphone },
   { name: 'Tasks', path: '/tasks', icon: ListTodo },
+  { name: 'Users', path: '/users', icon: UserCog },
   { name: 'Settings', path: '/settings', icon: Settings },
 ];
 

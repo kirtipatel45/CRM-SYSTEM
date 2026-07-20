@@ -22,7 +22,12 @@ async function seedData() {
     const adminId = adminUser ? adminUser._id : null;
 
     // 1. Roles (Settings)
+    const allActions = ['create', 'read', 'update', 'delete', 'assign', 'export', 'import', 'manage'];
+    const allResources = ['Dashboard', 'Leads', 'Customers', 'Deals', 'Marketing', 'Campaigns', 'Teams', 'Users', 'Reports', 'Settings'];
+    const adminPermissions = allResources.map(resource => ({ resource, actions: allActions }));
+
     const rolesData = [
+      { name: 'Admin', isSystem: true, permissions: adminPermissions },
       { name: 'Sales Manager', isSystem: false, permissions: [{ resource: 'Leads', actions: ['create', 'read', 'update', 'delete'] }, { resource: 'Deals', actions: ['create', 'read', 'update', 'delete'] }, { resource: 'Customers', actions: ['create', 'read', 'update', 'delete'] }] },
       { name: 'Marketing Specialist', isSystem: false, permissions: [{ resource: 'Campaigns', actions: ['create', 'read', 'update', 'delete'] }, { resource: 'Leads', actions: ['read'] }] },
       { name: 'Support Agent', isSystem: false, permissions: [{ resource: 'Customers', actions: ['read', 'update'] }] },

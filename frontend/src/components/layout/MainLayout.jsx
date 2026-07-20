@@ -1,7 +1,7 @@
-import { Outlet, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import Sidebar from './Sidebar';
-import Navbar from './Navbar';
+import { Outlet, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Sidebar from "./Sidebar";
+import Navbar from "./Navbar";
 
 export default function MainLayout() {
   const { isAuthenticated, loading } = useSelector((state) => state.auth);

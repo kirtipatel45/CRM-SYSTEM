@@ -1,9 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../services/api';
 import DataTable from '../components/ui/DataTable';
 import { Edit2, Trash2, Shield, CircleAlert } from 'lucide-react';
+import Modal from '../components/ui/Modal';
+import ConfirmDialog from '../components/ui/ConfirmDialog';
+import UserForm from '../components/forms/UserForm';
 
 export default function Users() {
+  const queryClient = useQueryClient();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+
   const { data: response, isLoading, isError } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
@@ -11,6 +20,30 @@ export default function Users() {
       return data;
     }
   });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id) => await api.delete(`/users/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      setIsConfirmOpen(false);
+      setSelectedRecord(null);
+    }
+  });
+
+  const handleAdd = () => {
+    setSelectedRecord(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (record) => {
+    setSelectedRecord(record);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = (record) => {
+    setSelectedRecord(record);
+    setIsConfirmOpen(true);
+  };
 
   const users = response?.data || [];
 
@@ -21,7 +54,7 @@ export default function Users() {
         <div className="flex items-center">
           <div className="flex-shrink-0 h-10 w-10">
             <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold">
-              {row.name.charAt(0)}
+              {row.name ? row.name.charAt(0) : '?'}
             </div>
           </div>
           <div className="ml-4">
@@ -43,6 +76,14 @@ export default function Users() {
       )
     },
     {
+      header: 'Department / Team',
+      cell: (row) => (
+        <div className="text-sm text-gray-900 dark:text-white">
+          {row.department || '-'} <span className="text-gray-500">/</span> {row.team || '-'}
+        </div>
+      )
+    },
+    {
       header: 'Status',
       cell: (row) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -58,10 +99,16 @@ export default function Users() {
       header: 'Actions',
       cell: (row) => (
         <div className="flex items-center space-x-3">
-          <button className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
+          <button 
+            onClick={() => handleEdit(row)}
+            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+          >
             <Edit2 className="w-4 h-4" />
           </button>
-          <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors">
+          <button 
+            onClick={() => handleDeleteClick(row)}
+            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+          >
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
@@ -86,8 +133,29 @@ export default function Users() {
         columns={columns}
         data={users}
         loading={isLoading}
-        onAdd={() => console.log('Open Add User Modal')}
+        onAdd={handleAdd}
         addButtonText="Add User"
+      />
+
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        title={selectedRecord ? 'Edit User' : 'Create User'}
+      >
+        <UserForm 
+          initialData={selectedRecord}
+          onSuccess={() => setIsModalOpen(false)}
+          onCancel={() => setIsModalOpen(false)}
+        />
+      </Modal>
+
+      <ConfirmDialog
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={() => deleteMutation.mutate(selectedRecord?._id)}
+        title="Delete User"
+        message={`Are you sure you want to delete "${selectedRecord?.name}"? This action cannot be undone.`}
+        isLoading={deleteMutation.isPending}
       />
     </div>
   );

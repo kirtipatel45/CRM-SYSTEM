@@ -32,7 +32,7 @@ export default function Register() {
   const { data: rolesResponse, isLoading: rolesLoading } = useQuery({
     queryKey: ['roles'],
     queryFn: async () => {
-      const { data } = await api.get('/roles');
+      const { data } = await api.get('/auth/roles');
       return data;
     }
   });

@@ -24,14 +24,21 @@ export const getUser = async (req, res, next) => {
 
 export const createUser = async (req, res, next) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { firstName, lastName, email, password, role, phone, department, team, isActive } = req.body;
     
+    let name = req.body.name;
+    if (!name && firstName && lastName) {
+      name = `${firstName} ${lastName}`;
+    }
+
     const roleExists = await Role.findById(role);
     if (!roleExists) {
       return res.status(400).json({ success: false, message: 'Role does not exist' });
     }
 
-    const user = await User.create({ name, email, password, role });
+    const user = await User.create({ 
+      firstName, lastName, name, email, password, role, phone, department, team, isActive 
+    });
     
     // Remove password from response
     user.password = undefined;
@@ -57,6 +64,10 @@ export const updateUser = async (req, res, next) => {
       if (!roleExists) {
         return res.status(400).json({ success: false, message: 'Role does not exist' });
       }
+    }
+
+    if (req.body.firstName && req.body.lastName && !req.body.name) {
+      req.body.name = `${req.body.firstName} ${req.body.lastName}`;
     }
 
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {

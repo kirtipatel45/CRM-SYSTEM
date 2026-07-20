@@ -1,6 +1,7 @@
 import User from '../users/user.model.js';
 import Role from '../roles/role.model.js';
 import jwt from 'jsonwebtoken';
+import { logAuditAction } from '../audit/audit.controller.js';
 
 export const getPublicRoles = async (req, res, next) => {
   try {
@@ -118,6 +119,9 @@ export const login = async (req, res, next) => {
       email: user.email,
       role: user.role,
     };
+
+    // Log the login event
+    await logAuditAction('User Login', 'Auth', user._id, { email: user.email }, user._id, req.ip);
 
     res.status(200).json({ success: true, user: userResponse, accessToken });
   } catch (error) {

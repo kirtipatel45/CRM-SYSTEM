@@ -8,8 +8,10 @@ import {
   Megaphone, 
   Settings,
   ListTodo,
-  UserCog
+  UserCog,
+  Shield
 } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 const navItems = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard },
@@ -19,10 +21,19 @@ const navItems = [
   { name: 'Marketing', path: '/marketing', icon: Megaphone },
   { name: 'Tasks', path: '/tasks', icon: ListTodo },
   { name: 'Users', path: '/users', icon: UserCog },
+  { name: 'Audit Logs', path: '/audit-logs', icon: Shield },
   { name: 'Settings', path: '/settings', icon: Settings },
 ];
 
 export default function Sidebar() {
+  const { user } = useSelector((state) => state.auth);
+  
+  const filteredNavItems = navItems.filter(item => {
+    if (item.name === 'Audit Logs') {
+      return user?.role?.name === 'Admin';
+    }
+    return true;
+  });
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -54,6 +65,22 @@ export default function Sidebar() {
         </motion.div>
       </div>
 
+      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+        {filteredNavItems.map((item) => (
+          <NavLink
+            key={item.name}
+            to={item.path}
+            className={({ isActive }) =>
+              `flex items-center px-3 py-2.5 rounded-lg transition-all duration-200 group ${
+                isActive
+                  ? 'bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 font-medium'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700/50 hover:text-gray-900 dark:hover:text-white'
+              }`
+            }
+          >
+            <item.icon className="w-5 h-5 mr-3 flex-shrink-0" />
+            <span className="text-sm">{item.name}</span>
+          </NavLink>
       <motion.div 
         variants={containerVariants}
         initial="hidden"

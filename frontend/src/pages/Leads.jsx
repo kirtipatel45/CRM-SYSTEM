@@ -164,22 +164,20 @@ export default function Leads() {
         <div className="flex bg-gray-100 dark:bg-slate-900 p-1 rounded-lg">
           <button
             onClick={() => setView("list")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-              view === "list"
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${view === "list"
                 ? "bg-white dark:bg-slate-800 shadow-sm text-gray-900 dark:text-white"
                 : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
-            }`}
+              }`}
           >
             <LayoutList className="w-4 h-4" />
             List View
           </button>
           <button
             onClick={() => setView("kanban")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-              view === "kanban"
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${view === "kanban"
                 ? "bg-white dark:bg-slate-800 shadow-sm text-gray-900 dark:text-white"
                 : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
-            }`}
+              }`}
           >
             <Kanban className="w-4 h-4" />
             Kanban Board

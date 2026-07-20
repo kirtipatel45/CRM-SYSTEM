@@ -37,20 +37,21 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = 'ma
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             onClick={onClose}
-            className="fixed inset-0 z-40 bg-gray-900/50 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 z-40 bg-gray-900/50 backdrop-blur-sm"
           />
           
           {/* Modal Container */}
-          <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="fixed inset-0 z-50 overflow-y-auto pointer-events-none">
             <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
               {/* Modal Panel */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                transition={{ type: "spring", duration: 0.5, bounce: 0.1 }}
-                className={`relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-800 text-left shadow-xl transition-all sm:my-8 w-full ${maxWidth} border border-gray-200 dark:border-slate-700`}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className={`relative transform overflow-hidden rounded-2xl bg-white dark:bg-slate-800 text-left shadow-xl sm:my-8 w-full ${maxWidth} border border-gray-200 dark:border-slate-700 pointer-events-auto`}
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Header */}

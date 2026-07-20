@@ -11,6 +11,7 @@ import campaignRoutes from './modules/campaigns/campaign.routes.js';
 import teamRoutes from './modules/teams/team.routes.js';
 import taskRoutes from './modules/tasks/task.routes.js';
 import reportRoutes from './modules/reports/report.routes.js';
+import auditRoutes from './modules/audit/audit.routes.js';
 
 const app = express();
 
@@ -59,6 +60,7 @@ app.use('/api/campaigns', campaignRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/reports', reportRoutes);
+app.use('/api/audit-logs', auditRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

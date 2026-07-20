@@ -1,4 +1,5 @@
 import Lead from './lead.model.js';
+import { logAuditAction } from '../audit/audit.controller.js';
 
 export const getLeads = async (req, res, next) => {
   try {
@@ -72,6 +73,9 @@ export const createLead = async (req, res, next) => {
 
     const lead = await Lead.create(req.body);
     res.status(201).json({ success: true, data: lead });
+
+    // Log Audit Action
+    await logAuditAction('Created Lead', 'Leads', req.user._id, { leadName: `${lead.firstName} ${lead.lastName}`, email: lead.email }, lead._id, req.ip);
   } catch (error) {
     next(error);
   }
@@ -114,6 +118,10 @@ export const deleteLead = async (req, res, next) => {
     }
 
     await lead.deleteOne();
+    
+    // Log Audit Action
+    await logAuditAction('Deleted Lead', 'Leads', req.user._id, { leadId: req.params.id }, req.params.id, req.ip);
+
     res.status(200).json({ success: true, message: 'Lead deleted successfully' });
   } catch (error) {
     next(error);

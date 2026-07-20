@@ -7,8 +7,10 @@ import {
   Megaphone, 
   Settings,
   ListTodo,
-  UserCog
+  UserCog,
+  Shield
 } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 const navItems = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard },
@@ -18,10 +20,20 @@ const navItems = [
   { name: 'Marketing', path: '/marketing', icon: Megaphone },
   { name: 'Tasks', path: '/tasks', icon: ListTodo },
   { name: 'Users', path: '/users', icon: UserCog },
+  { name: 'Audit Logs', path: '/audit-logs', icon: Shield },
   { name: 'Settings', path: '/settings', icon: Settings },
 ];
 
 export default function Sidebar() {
+  const { user } = useSelector((state) => state.auth);
+  
+  const filteredNavItems = navItems.filter(item => {
+    if (item.name === 'Audit Logs') {
+      return user?.role?.name === 'Admin';
+    }
+    return true;
+  });
+
   return (
     <div className="w-64 flex-shrink-0 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 h-full flex flex-col transition-colors duration-200">
       <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-slate-700">
@@ -34,7 +46,7 @@ export default function Sidebar() {
       </div>
 
       <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-        {navItems.map((item) => (
+        {filteredNavItems.map((item) => (
           <NavLink
             key={item.name}
             to={item.path}

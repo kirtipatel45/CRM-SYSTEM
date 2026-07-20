@@ -15,6 +15,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Roles from "./pages/Roles";
+import LeadDetails from './pages/LeadDetails';
+import AuditLogs from './pages/AuditLogs';
 import Leads from "./pages/Leads";
 import Customers from "./pages/Customers";
 import Deals from "./pages/Deals";
@@ -71,6 +73,7 @@ function App() {
           <Route path="reports" element={<Reports />} />
           <Route path="users" element={<Users />} />
           <Route path="roles" element={<Roles />} />
+          <Route path="audit-logs" element={<AuditLogs />} />
           <Route path="settings" element={<Roles />} />{" "}
           {/* settings mapped to roles for now */}
           {/* Add more routes here for other modules */}

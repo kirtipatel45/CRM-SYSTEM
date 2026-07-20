@@ -41,7 +41,26 @@ export default function Leads() {
       const { data } = await api.put(`/leads/${leadId}`, { status: newStatus });
       return data;
     },
-    onSuccess: () => {
+    onMutate: async ({ leadId, newStatus }) => {
+      await queryClient.cancelQueries({ queryKey: ['leads'] });
+      const previousLeads = queryClient.getQueryData(['leads']);
+      
+      queryClient.setQueryData(['leads'], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          data: old.data.map(lead => 
+            lead._id === leadId ? { ...lead, status: newStatus } : lead
+          )
+        };
+      });
+      
+      return { previousLeads };
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['leads'], context.previousLeads);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["leads"] });
     },
   });
